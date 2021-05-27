@@ -1,0 +1,13 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+.container {
+  display: flex;
+  justify-content: center;
+}
+
+.label {
+  padding: 1rem;
+}

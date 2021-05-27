@@ -1,0 +1,22 @@
+.navbar {
+  display: flex;
+  height: 2rem;
+  justify-content: center;
+  margin: 1.5rem;
+}
+
+.navbar a {
+  color: #303030;
+  font-weight: 500;
+  padding: 0.25rem 1.5rem;
+  border-radius: 4px;
+  text-decoration: none;
+}
+
+.navbar a:visited {
+  color: #303030;
+}
+
+.navbar a:hover {
+  color: #795cbc;
+}

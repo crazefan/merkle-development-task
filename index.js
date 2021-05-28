@@ -5,7 +5,7 @@ const axios = require("axios");
 const cors = require("cors");
 
 const omdbApi = axios.create({
-  baseURL: `https://www.omdbapi.com/`,
+  baseURL: "https://www.omdbapi.com/",
 });
 
 omdbApi.interceptors.response.use(
@@ -18,7 +18,7 @@ omdbApi.interceptors.response.use(
 
 omdbApi.interceptors.request.use((config) => {
   config.params = {
-    apiKey: "a4308228",
+    apikey: "a4308228",
     ...config.params,
   };
   return config;
@@ -26,10 +26,10 @@ omdbApi.interceptors.request.use((config) => {
 
 app.use(cors());
 
-app.get("/:movie.:type.:year", async (req, res) => {
-  const { movie, type, year } = req.params;
+app.get("/", async (req, res) => {
+  const { movie, type, year } = req.query;
   console.log(movie, type, year);
-  const response = await omdbApi.get("", { params: { s: movie, type: type, y: year } });
+  const response = await omdbApi.get("", { params: { s: movie, y: year, type: type } });
   console.log(response);
   res.send(response);
 });

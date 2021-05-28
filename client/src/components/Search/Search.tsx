@@ -1,48 +1,32 @@
 import React, { useState } from "react";
-import { getMovies } from "../../utils/api";
+import { fetchMovies } from "../../utils/api";
 import styles from "./search.module.css";
 
-const genres = [
-  "Action",
-  "Adventure",
-  "Animation",
-  "Biography",
-  "Comedy",
-  "Crime",
-  "Documentary",
-  "Drama",
-  "Family",
-  "Fantasy",
-  "Film-Noir",
-  "Game-Show",
-  "History",
-  "Horror",
-  "Music",
-  "Musical",
-  "Mystery",
-  "News",
-  "Reality-TV",
-  "Romance",
-  "Sci-Fi",
-  "Sport",
-  "Talk-Show",
-  "Thriller",
-  "War",
-  "Western",
-];
+const genres = ["Movie", "Episode", "Series"];
 
 const Search = () => {
-  const [type, setType] = useState("");
-  const [year, setYear] = useState();
+  const [loading, setLoading] = useState(false);
+  const [movieQuery, setMovieQuery] = useState<string>("");
+  const [type, setType] = useState<string>("");
+  const [year, setYear] = useState<number | "">("");
 
-  const handleYearChange = (e) => {
-    setYear(e.target.value);
-    console.log(e.target.value);
+  const handleSearch = async (e: any) => {
+    setMovieQuery(e.target.value);
+    await fetchMovies({ movie: movieQuery, type: type, year: year });
   };
 
-  const handleTypeChange = (e) => {
+  const handleYearChange = async (e: any) => {
+    setYear(e.target.value);
+    if (movieQuery) {
+      await fetchMovies({ movie: movieQuery, type: type, year: year });
+    }
+  };
+
+  const handleTypeChange = async (e: any) => {
     setType(e.target.value);
-    console.log(e.target.value);
+    if (movieQuery) {
+      await fetchMovies({ movie: movieQuery, type: type, year: year });
+    }
   };
 
   const typeOptionsList = () =>
@@ -61,22 +45,24 @@ const Search = () => {
     ));
   };
 
-  const handleSearh = async () => {
-    await getMovies();
-  };
-
   return (
     <div className={styles.container}>
       <label htmlFor="search-input" className={styles.label}>
         Search movies:
       </label>
-      <input name="Search" id="search-input" type="text" className={styles.input} />
+      <input
+        name="Search"
+        id="search-input"
+        type="text"
+        className={styles.input}
+        onChange={handleSearch}
+      />
 
       <label htmlFor="year-input" className={styles.label}>
         Year:
       </label>
       <select name="Year" id="year-input" onChange={handleYearChange}>
-        <option key="all" value="all">
+        <option key="all" value="">
           All years
         </option>
         {yearOptionsList()}
@@ -85,12 +71,11 @@ const Search = () => {
         Type:
       </label>
       <select name="Type" id="type-input" onChange={handleTypeChange}>
-        <option key="all" value="all">
+        <option key="all" value="">
           All genres
         </option>
         {typeOptionsList()}
       </select>
-      <button onClick={handleSearh}>Test</button>
     </div>
   );
 };

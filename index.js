@@ -2,9 +2,10 @@ const express = require("express");
 const app = express();
 const port = process.env.port || 5000;
 const axios = require("axios");
+const cors = require("cors");
 
 const omdbApi = axios.create({
-  baseURL: `https://www.omdbapi.com/?apikey=a4308228&i=tt1285016`,
+  baseURL: `https://www.omdbapi.com/`,
 });
 
 omdbApi.interceptors.response.use(
@@ -15,8 +16,20 @@ omdbApi.interceptors.response.use(
   }
 );
 
-app.get("/omdb", async (req, res) => {
-  const response = await omdbApi.get();
+omdbApi.interceptors.request.use((config) => {
+  config.params = {
+    apiKey: "a4308228",
+    ...config.params,
+  };
+  return config;
+});
+
+app.use(cors());
+
+app.get("/:movie.:type.:year", async (req, res) => {
+  const { movie, type, year } = req.params;
+  console.log(movie, type, year);
+  const response = await omdbApi.get("", { params: { s: movie, type: type, y: year } });
   console.log(response);
   res.send(response);
 });

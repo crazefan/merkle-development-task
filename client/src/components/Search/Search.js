@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { getMovies } from "../../utils/api";
 import styles from "./search.module.css";
 
 const genres = [
@@ -60,12 +61,17 @@ const Search = () => {
     ));
   };
 
+  const handleSearh = async () => {
+    await getMovies();
+  };
+
   return (
     <div className={styles.container}>
       <label htmlFor="search-input" className={styles.label}>
         Search movies:
       </label>
       <input name="Search" id="search-input" type="text" className={styles.input} />
+
       <label htmlFor="year-input" className={styles.label}>
         Year:
       </label>
@@ -84,6 +90,7 @@ const Search = () => {
         </option>
         {typeOptionsList()}
       </select>
+      <button onClick={handleSearh}>Test</button>
     </div>
   );
 };

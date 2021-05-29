@@ -2,6 +2,7 @@ import React from "react";
 import styles from "./searchcontrol.module.css";
 
 const SearchControl = ({ onInputChange, onTypeChange, onYearChange }) => {
+  // generate options for years from 1874 to 2021
   const yearOptionsList = () => {
     const years = Array.from(Array(149), (x, i) => 2021 - i);
     return years.map((year, key) => (

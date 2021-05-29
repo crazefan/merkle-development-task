@@ -38,9 +38,11 @@ const Search = () => {
     search(movieQuery);
   }, 300);
 
-  // apply side effects whenever any input changes
+  // apply side effects whenever any input changes (unless input is empty)
   useEffect(() => {
-    fetchDebounce();
+    if (movieQuery) {
+      fetchDebounce();
+    }
   }, [movieQuery, type, year]);
 
   return (

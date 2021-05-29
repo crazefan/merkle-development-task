@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { fetchMovies } from "../../utils/api";
 import styles from "./search.module.css";
+import Result from "../Result/Result";
 
 const genres = ["Movie", "Episode", "Series"];
 
@@ -9,24 +10,29 @@ const Search = () => {
   const [movieQuery, setMovieQuery] = useState<string>("");
   const [type, setType] = useState<string>("");
   const [year, setYear] = useState<number | "">("");
+  const [movies, setMovies] = useState<any[]>([]);
 
-  const handleSearch = async (e: any) => {
+  const search = async (searchvalue: string) => {
+    const res: any = await fetchMovies({ movie: searchvalue.trim(), type: type, year: year });
+    console.log(res);
+    //check if search query is not empty and fetch movies from API, after that set results array to movies
+    if (res.Response === "True") {
+      setMovies([...res.Search]);
+      console.log(res.Search);
+    }
+  };
+
+  const handleSearch = (e: any) => {
+    //really weird workaround, need to fix
     setMovieQuery(e.target.value);
-    await fetchMovies({ movie: movieQuery, type: type, year: year });
   };
 
-  const handleYearChange = async (e: any) => {
+  const handleYearChange = (e: any) => {
     setYear(e.target.value);
-    if (movieQuery) {
-      await fetchMovies({ movie: movieQuery, type: type, year: year });
-    }
   };
 
-  const handleTypeChange = async (e: any) => {
+  const handleTypeChange = (e: any) => {
     setType(e.target.value);
-    if (movieQuery) {
-      await fetchMovies({ movie: movieQuery, type: type, year: year });
-    }
   };
 
   const typeOptionsList = () =>
@@ -45,38 +51,46 @@ const Search = () => {
     ));
   };
 
-  return (
-    <div className={styles.container}>
-      <label htmlFor="search-input" className={styles.label}>
-        Search movies:
-      </label>
-      <input
-        name="Search"
-        id="search-input"
-        type="text"
-        className={styles.input}
-        onChange={handleSearch}
-      />
+  useEffect(() => {
+    search(movieQuery);
+  }, [movieQuery, type, year]);
 
-      <label htmlFor="year-input" className={styles.label}>
-        Year:
-      </label>
-      <select name="Year" id="year-input" onChange={handleYearChange}>
-        <option key="all" value="">
-          All years
-        </option>
-        {yearOptionsList()}
-      </select>
-      <label htmlFor="type-input" className={styles.label}>
-        Type:
-      </label>
-      <select name="Type" id="type-input" onChange={handleTypeChange}>
-        <option key="all" value="">
-          All genres
-        </option>
-        {typeOptionsList()}
-      </select>
-    </div>
+  return (
+    <>
+      <div className={styles.container}>
+        <label htmlFor="search-input" className={styles.label}>
+          Search movies:
+        </label>
+        <input
+          name="Search"
+          id="search-input"
+          type="text"
+          value={movieQuery}
+          className={styles.input}
+          onChange={handleSearch}
+        />
+
+        <label htmlFor="year-input" className={styles.label}>
+          Year:
+        </label>
+        <select name="Year" id="year-input" onChange={handleYearChange}>
+          <option key="all" value="">
+            All years
+          </option>
+          {yearOptionsList()}
+        </select>
+        <label htmlFor="type-input" className={styles.label}>
+          Type:
+        </label>
+        <select name="Type" id="type-input" onChange={handleTypeChange}>
+          <option key="all" value="">
+            All genres
+          </option>
+          {typeOptionsList()}
+        </select>
+      </div>
+      <Result movies={movies} />
+    </>
   );
 };
 

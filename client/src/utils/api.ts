@@ -19,10 +19,12 @@ const makeRequestCreator = () => {
       })
       .then((response) => {
         console.log(response.data);
+        return response.data;
       })
       .catch((error) => {
         if (axios.isCancel(error)) {
           console.log("Request canceled", error);
+          return { Response: "false" };
         }
         console.log(error);
       });

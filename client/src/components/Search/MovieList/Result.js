@@ -1,12 +1,11 @@
 import React from "react";
 import MovieCard from "./MovieCard/MovieCard";
 import styles from "./result.module.css";
-import { ResultProps } from "./types";
 
-const Result = ({ movies }: ResultProps) => {
+const Result = ({ movies }) => {
   const renderCards = () => {
     if (movies.length) {
-      return movies.map((movie: any, idx: any) => <MovieCard movie={movie} />);
+      return movies.map((movie, idx) => <MovieCard movie={movie} />);
     }
     return null;
   };

@@ -1,8 +1,7 @@
 import React from "react";
-import { MovieProps } from "./types";
 import styles from "./moviecard.module.css";
 
-const MovieCard = ({ movie }: any) => {
+const MovieCard = ({ movie }) => {
   return (
     <div>
       <p>Title: {movie.Title}</p>

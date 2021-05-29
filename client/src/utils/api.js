@@ -1,13 +1,11 @@
 import axios from "axios";
 
-import { FetchParams } from "./types";
-
 // request creator is needed to cancel unnecessary calls on client side using axios cancel token
 const makeRequestCreator = () => {
   //token is declared outside a called function so that previous token is untouched
-  let token: any;
+  let token;
 
-  return async ({ movie, year, type }: FetchParams) => {
+  return async ({ movie, year, type }) => {
     if (token) token.cancel("Request is cancelled");
 
     token = axios.CancelToken.source();

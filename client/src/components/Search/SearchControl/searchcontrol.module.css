@@ -1,0 +1,18 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+.container {
+  display: flex;
+  justify-content: center;
+}
+
+.label {
+  margin: 1rem;
+}
+
+.options {
+  display: block;
+  justify-content: center;
+}

@@ -3,8 +3,9 @@ import { debounce } from "lodash";
 
 import { fetchMovies } from "../../utils/api";
 
-import Result from "./MovieList/Result";
+import Result from "./MovieList/MovieList";
 import SearchControl from "./SearchControl/SeachControl";
+import Spinner from "../Spinner/Spinner";
 
 const Search = () => {
   const [loading, setLoading] = useState(false);
@@ -12,8 +13,10 @@ const Search = () => {
   const [type, setType] = useState("");
   const [year, setYear] = useState("");
   const [movies, setMovies] = useState([]);
+  const [resultPage, setResultPage] = useState(1);
 
   const search = async (searchvalue) => {
+    setLoading(true);
     const res = await fetchMovies({ movie: searchvalue.trim(), type: type, year: year });
     console.log(res);
     //check if search query is not empty and fetch movies from API, after that set results array to movies
@@ -21,6 +24,7 @@ const Search = () => {
       setMovies([...res.Search]);
       console.log(res.Search);
     }
+    setLoading(false);
   };
 
   const handleInputChange = (e) => {
@@ -36,25 +40,25 @@ const Search = () => {
   };
 
   // adds 500ms delay for search to avoid unnecessary calls to API using lodash debounce
-  const fetchDebounce = debounce(() => {
+  const searchDebounce = debounce(() => {
     search(movieQuery);
   }, 300);
 
   // apply side effects whenever any input changes (unless input is empty)
   useEffect(() => {
     if (movieQuery) {
-      fetchDebounce();
+      searchDebounce();
     }
   }, [movieQuery, type, year]);
 
   return (
-    <div class="container mx-auto py-4">
+    <div className="container mx-auto">
       <SearchControl
         onInputChange={handleInputChange}
         onTypeChange={handleTypeChange}
         onYearChange={handleYearChange}
       />
-      <Result movies={movies} />
+      {loading ? <Spinner /> : <Result movies={movies} />}
     </div>
   );
 };

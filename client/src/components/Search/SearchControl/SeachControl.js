@@ -11,31 +11,31 @@ const SearchControl = ({ onInputChange, onTypeChange, onYearChange }) => {
     ));
   };
   return (
-    <div class="container flex justify-center space-x-4">
-      <label>
-        Search movies:
-        <input
-          class="border mx-4 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent ..."
-          name="Search"
-          id="search-input"
-          type="text"
-          onChange={onInputChange}
-        />
-      </label>
+    <div className="flex justify-center items-center my-8">
+      <div className="mx-4">
+        <label>
+          Search movies:
+          <input
+            className="shadow appearance-none focus:outline-none focus:ring-2 focus:ring-purple-600 border rounded py-2 px-3 mx-2 text-grey-darker"
+            name="Search"
+            id="search-input"
+            type="text"
+            onChange={onInputChange}
+          />
+        </label>
+      </div>
 
-      <label htmlFor="year-input" className="">
-        Year:
-        <select class="mx-2" name="Year" id="year-input" onChange={onYearChange}>
+      <div>
+        <label htmlFor="year-input">Year:</label>
+        <select className="mx-2" name="Year" id="year-input" onChange={onYearChange}>
           <option key="all" value="">
             All years
           </option>
           {yearOptionsList()}
         </select>
-      </label>
 
-      <label htmlFor="type-input" className="">
-        Type:
-        <select class="mx-2" name="Type" id="type-input" onChange={onTypeChange}>
+        <label htmlFor="type-input">Type:</label>
+        <select className="mx-2" name="Type" id="type-input" onChange={onTypeChange}>
           <option key="all" value="">
             All genres
           </option>
@@ -43,7 +43,7 @@ const SearchControl = ({ onInputChange, onTypeChange, onYearChange }) => {
           <option value="episode">Episode</option>
           <option value="series">Series</option>
         </select>
-      </label>
+      </div>
     </div>
   );
 };

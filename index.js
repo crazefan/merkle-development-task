@@ -43,9 +43,7 @@ omdbApi.interceptors.request.use((config) => {
 
 app.use(cors());
 
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "/client/build/index.html"));
-});
+app.use(express.static(path.join(__dirname, "client/build")));
 
 app.get("/api/", async (req, res) => {
   const { movie, type, year } = req.query;
@@ -61,6 +59,10 @@ app.get("/auth/login", auth, (req, res) => {
   } else if (req.auth.user === "tima") {
     res.send("tima");
   }
+});
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "/client/build/index.html"));
 });
 
 app.listen(port, () => console.log(`Listening to port ${port}`));

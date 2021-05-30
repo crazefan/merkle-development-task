@@ -1,23 +1,28 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   const [auth, setAuth] = useState(true);
 
   return (
-    <nav class="mb-2">
-      <div class="container mx-auto px-6 py-2 flex justify-between items-center">
-        <a class="font-bold text-xl" href="#main">
+    <nav className="mb-4">
+      <div className="container mx-auto px-6 py-2 flex justify-between items-center">
+        <Link
+          to="/"
+          className="font-bold text-purple-500 hover:text-purple-800 text-xl"
+          href="#main"
+        >
           merkle-development-task
-        </a>
-        <div class=" lg:block">
-          <ul class="inline-flex">
+        </Link>
+        <div className=" lg:block">
+          <ul className="inline-flex">
             <li>
-              <a class="px-4 hover:text-purple-800" href="/">
+              <Link to="/login" className="px-4 hover:text-purple-800" href="/">
                 Log in
-              </a>
+              </Link>
             </li>
             <li>
-              <a class="px-4 hover:text-purple-800" href="#">
+              <a className="px-4 hover:text-purple-800" href="#">
                 Sign up
               </a>
             </li>

@@ -1,3 +1,4 @@
+import { set } from "lodash";
 import React, { useState } from "react";
 import { authRequest } from "../../utils/api";
 
@@ -14,9 +15,11 @@ const Auth = () => {
   };
 
   const handleLogin = async () => {
+    setAuthmessage(false);
     const [data, error] = await authRequest(username, password);
     if (error) {
       console.log(error);
+      setAuthmessage(true);
       return;
     }
     console.log(data);
@@ -27,13 +30,41 @@ const Auth = () => {
   };
 
   return (
-    <div>
-      <label htmlFor="login" />
-      <input id="login" type="text" onChange={handleUsernameChange} />
-      <label htmlFor="password" />
-      <input id="password" type="password" onChange={handlePasswordChange} />
-      <button onClick={handleLogin}>Log in</button>
-      {authmessage ? authError : null}
+    <div className="flex justify-center pt-10">
+      <div className="max-w-md bg-white rounded px-8 py-6 mx-10 flex flex-col">
+        <div className="mb-4">
+          <label className="block text-purple-500 text-sm font-bold mb-2" for="username">
+            Username
+          </label>
+          <input
+            onChange={handleUsernameChange}
+            className="shadow appearance-none focus:outline-none focus:ring-2 focus:ring-purple-600 border rounded w-full py-2 px-3 text-grey-darker"
+            id="username"
+            type="text"
+            placeholder="Username"
+          />
+        </div>
+        <div className="mb-6">
+          <label className="block text-purple-500 text-sm font-bold mb-2" for="password">
+            Password
+          </label>
+          <input
+            onChange={handlePasswordChange}
+            className="shadow appearance-none focus:outline-none focus:ring-2 focus:ring-purple-600 border border-red rounded w-full py-2 px-3 text-grey-darker mb-3"
+            id="password"
+            type="password"
+            placeholder="******************"
+          />
+        </div>
+
+        <button
+          className="bg-purple-500 hover:bg-purple-800 text-white font-bold py-2 px-4 rounded"
+          type="button"
+          onSubmit={handleLogin}
+        >
+          Sign In
+        </button>
+      </div>
     </div>
   );
 };

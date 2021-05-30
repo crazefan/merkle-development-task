@@ -1,6 +1,5 @@
 import React from "react";
 import MovieCard from "./MovieCard/MovieCard";
-import styles from "./result.module.css";
 
 const Result = ({ movies }) => {
   const renderCards = () => {
@@ -9,7 +8,11 @@ const Result = ({ movies }) => {
     }
     return null;
   };
-  return <div className={styles.container}>{renderCards()}</div>;
+  return (
+    <div className="container max-w-400 mx-auto grid grid-cols-2 justify-center gap-2 space-y-6 my-7">
+      {renderCards()}
+    </div>
+  );
 };
 
 export default Result;

@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { fetchMovies } from "../../utils/api";
-import Result from "./MovieList/Result";
 import { debounce } from "lodash";
+
+import { fetchMovies } from "../../utils/api";
+
+import Result from "./MovieList/Result";
 import SearchControl from "./SearchControl/SeachControl";
 
 const Search = () => {
@@ -46,14 +48,14 @@ const Search = () => {
   }, [movieQuery, type, year]);
 
   return (
-    <>
+    <div class="container mx-auto py-4">
       <SearchControl
         onInputChange={handleInputChange}
         onTypeChange={handleTypeChange}
         onYearChange={handleYearChange}
       />
       <Result movies={movies} />
-    </>
+    </div>
   );
 };
 

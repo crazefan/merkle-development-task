@@ -1,5 +1,4 @@
 import React from "react";
-import styles from "./searchcontrol.module.css";
 
 const SearchControl = ({ onInputChange, onTypeChange, onYearChange }) => {
   // generate options for years from 1874 to 2021
@@ -12,38 +11,39 @@ const SearchControl = ({ onInputChange, onTypeChange, onYearChange }) => {
     ));
   };
   return (
-    <div className={styles.container}>
-      <label htmlFor="search-input" className={styles.label}>
+    <div class="container flex justify-center space-x-4">
+      <label>
         Search movies:
+        <input
+          class="border mx-4 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent ..."
+          name="Search"
+          id="search-input"
+          type="text"
+          onChange={onInputChange}
+        />
       </label>
-      <input
-        name="Search"
-        id="search-input"
-        type="text"
-        className={styles.input}
-        onChange={onInputChange}
-      />
 
-      <label htmlFor="year-input" className={styles.label}>
+      <label htmlFor="year-input" className="">
         Year:
+        <select class="mx-2" name="Year" id="year-input" onChange={onYearChange}>
+          <option key="all" value="">
+            All years
+          </option>
+          {yearOptionsList()}
+        </select>
       </label>
-      <select name="Year" id="year-input" onChange={onYearChange}>
-        <option key="all" value="">
-          All years
-        </option>
-        {yearOptionsList()}
-      </select>
-      <label htmlFor="type-input" className={styles.label}>
+
+      <label htmlFor="type-input" className="">
         Type:
+        <select class="mx-2" name="Type" id="type-input" onChange={onTypeChange}>
+          <option key="all" value="">
+            All genres
+          </option>
+          <option value="movie">Movie</option>
+          <option value="episode">Episode</option>
+          <option value="series">Series</option>
+        </select>
       </label>
-      <select name="Type" id="type-input" onChange={onTypeChange}>
-        <option key="all" value="">
-          All genres
-        </option>
-        <option value="movie">Movie</option>
-        <option value="episode">Episode</option>
-        <option value="series">Series</option>
-      </select>
     </div>
   );
 };

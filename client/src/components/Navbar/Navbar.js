@@ -5,8 +5,8 @@ const Navbar = () => {
   const [auth, setAuth] = useState(true);
 
   return (
-    <nav className="mb-4">
-      <div className="container mx-auto px-6 py-2 flex justify-between items-center">
+    <nav className="mb-4 shadow">
+      <div className="container mx-auto px-6 py-3  flex justify-between items-center">
         <Link
           to="/"
           className="font-bold text-purple-500 hover:text-purple-800 text-xl"

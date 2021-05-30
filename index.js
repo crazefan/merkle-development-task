@@ -46,9 +46,9 @@ app.use(cors());
 app.use(express.static(path.join(__dirname, "client/build")));
 
 app.get("/api/", async (req, res) => {
-  const { movie, type, year } = req.query;
+  const { movie, page, type, year } = req.query;
   console.log(movie, type, year);
-  const response = await omdbApi.get("", { params: { s: movie, y: year, type: type } });
+  const response = await omdbApi.get("", { params: { s: movie, page: page, y: year, type: type } });
   console.log(response);
   res.send(response);
 });

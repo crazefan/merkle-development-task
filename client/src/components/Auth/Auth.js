@@ -1,6 +1,6 @@
 import { set } from "lodash";
 import React, { useState } from "react";
-import { authRequest } from "../../utils/api";
+import { authRequest } from "../../api/api";
 
 const Auth = () => {
   const [username, setUsername] = useState();

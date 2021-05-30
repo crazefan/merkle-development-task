@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { debounce } from "lodash";
 
-import { fetchMovies } from "../../utils/api";
+import { fetchMovies } from "../../api/api";
+import { countTotalPages } from "../../utils/utils";
 
-import Result from "./MovieList/MovieList";
-import SearchControl from "./SearchControl/SeachControl";
 import Spinner from "../Spinner/Spinner";
+import MovieList from "./MovieList/MovieList";
+import PageControl from "./PageControl/PageControl";
+import SearchControl from "./SearchControl/SeachControl";
 
 const Search = () => {
   const [loading, setLoading] = useState(false);
@@ -13,30 +15,43 @@ const Search = () => {
   const [type, setType] = useState("");
   const [year, setYear] = useState("");
   const [movies, setMovies] = useState([]);
-  const [resultPage, setResultPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState();
+  const [notFound, setNotFound] = useState(false);
 
   const search = async (searchvalue) => {
     setLoading(true);
-    const res = await fetchMovies({ movie: searchvalue.trim(), type: type, year: year });
+    const res = await fetchMovies({ movie: searchvalue.trim(), page: currentPage, type, year });
     console.log(res);
     //check if search query is not empty and fetch movies from API, after that set results array to movies
     if (res.Response === "True") {
       setMovies([...res.Search]);
-      console.log(res.Search);
+      setLoading(false);
+      setNotFound(false);
+      setTotalPages(countTotalPages(res.totalResults));
+      return;
     }
+    setNotFound(true);
     setLoading(false);
+  };
+
+  const handlePageChange = (change) => {
+    setCurrentPage(currentPage + change);
   };
 
   const handleInputChange = (e) => {
     setMovieQuery(e.target.value);
+    setCurrentPage(1);
   };
 
   const handleYearChange = (e) => {
     setYear(e.target.value);
+    setCurrentPage(1);
   };
 
   const handleTypeChange = (e) => {
     setType(e.target.value);
+    setCurrentPage(1);
   };
 
   // adds 500ms delay for search to avoid unnecessary calls to API using lodash debounce
@@ -49,7 +64,7 @@ const Search = () => {
     if (movieQuery) {
       searchDebounce();
     }
-  }, [movieQuery, type, year]);
+  }, [movieQuery, type, year, currentPage]);
 
   return (
     <div className="container mx-auto">
@@ -58,7 +73,12 @@ const Search = () => {
         onTypeChange={handleTypeChange}
         onYearChange={handleYearChange}
       />
-      {loading ? <Spinner /> : <Result movies={movies} />}
+      <PageControl
+        currentPage={currentPage}
+        totalPages={totalPages}
+        handlePageChange={handlePageChange}
+      />
+      {loading ? <Spinner /> : <MovieList movies={movies} notFound={notFound} />}
     </div>
   );
 };

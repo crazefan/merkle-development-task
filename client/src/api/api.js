@@ -7,7 +7,6 @@ export const authRequest = async (username, password) => {
       auth: { username, password },
     })
     .then((data) => {
-      console.log(data);
       return [data, null];
     })
     .catch((error) => {
@@ -31,7 +30,6 @@ const makeRequestCreator = () => {
         cancelToken: token.token,
       })
       .then((response) => {
-        console.log(response.data);
         return response.data;
       })
       .catch((error) => {

@@ -42,6 +42,7 @@ const SearchControl = ({ onInputChange, onTypeChange, onYearChange }) => {
           <option value="movie">Movie</option>
           <option value="episode">Episode</option>
           <option value="series">Series</option>
+          <option value="game">Game</option>
         </select>
       </div>
     </div>

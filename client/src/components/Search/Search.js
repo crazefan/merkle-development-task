@@ -21,14 +21,24 @@ const Search = () => {
 
   const search = async (searchvalue) => {
     setLoading(true);
-    const res = await fetchMovies({ movie: searchvalue.trim(), page: currentPage, type, year });
-    console.log(res);
+    const [data, error] = await fetchMovies({
+      movie: searchvalue.trim(),
+      page: currentPage,
+      type,
+      year,
+    });
+    console.log(data);
     //check if search query is not empty and fetch movies from API, after that set results array to movies
-    if (res.Response === "True") {
-      setMovies([...res.Search]);
+    if (data && data.Response === "True") {
+      setMovies([...data.Search]);
       setLoading(false);
       setNotFound(false);
-      setTotalPages(countTotalPages(res.totalResults));
+      setTotalPages(countTotalPages(data.totalResults));
+      return;
+    }
+    if (data && data.Response === "False") {
+      setNotFound(true);
+      setLoading(false);
       return;
     }
     setNotFound(true);

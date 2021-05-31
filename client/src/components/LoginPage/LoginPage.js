@@ -21,8 +21,10 @@ const LoginPage = ({ handleIsAuth }) => {
       setAuthmessage(true);
       return;
     }
-    handleIsAuth();
-    console.log(data);
+    if (data) {
+      handleIsAuth();
+      localStorage.setItem("token", data);
+    }
   };
 
   return (

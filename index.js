@@ -5,6 +5,7 @@ const path = require("path");
 const redis = require("redis");
 const basicAuth = require("express-basic-auth");
 const cookieParser = require("cookie-parser");
+const jwt = require("jsonwebtoken");
 
 const app = express();
 
@@ -13,6 +14,8 @@ const redisClient = redis.createClient(6379);
 
 //server is running on 5000 port (or other specified in .env file)
 const port = process.env.port || 5000;
+
+const secret = "c681d5a8e4f2a0cb7d1ac717c370429d";
 
 //setting up users with access to API endpoint
 const auth = basicAuth({
@@ -27,6 +30,28 @@ function getUnauthorizedResponse(req) {
   return req.auth
     ? "Credentials " + req.auth.user + ":" + req.auth.password + " rejected"
     : "No credentials provided";
+}
+
+function generateAccessToken(username) {
+  return jwt.sign(username, secret, { expiresIn: "1800s" });
+}
+
+//middleware for token authentication
+function authenticateToken(req, res, next) {
+  const authHeader = req.headers["authorization"];
+  const token = authHeader && authHeader.split(" ")[1];
+
+  if (token == null) return res.sendStatus(401);
+
+  jwt.verify(token, secret, (err, user) => {
+    console.log(err);
+
+    if (err) return res.sendStatus(403);
+
+    req.user = user;
+
+    next();
+  });
 }
 
 // creating axios instance to fetch from remote API
@@ -46,10 +71,8 @@ app.use(cors());
 
 app.use(express.static(path.join(__dirname, "client/build")));
 
-app.use(cookieParser("642a04b66be1a2726b296aae3b52973f"));
-
-//server's api fetching endpoint
-app.get("/api/", (req, res) => {
+//server's api fetching endpoint secured by client token authentication
+app.get("/api/", authenticateToken, (req, res) => {
   const { movie, page, type, year } = req.query;
 
   //first check if Redis has the request cached
@@ -81,30 +104,17 @@ app.get("/api/", (req, res) => {
 });
 
 app.get("/auth/login", auth, (req, res) => {
-  const options = {
-    httpOnly: true,
-    signed: true,
-  };
+  console.log(req.auth.user);
 
   if (req.auth.user === "admin") {
-    res.cookie("name", "admin", options).send("admin");
-  } else if (req.auth.user === "merkle") {
-    res.cookie("name", "merkle", options).send("merkle");
+    const token = generateAccessToken({ username: req.auth.user });
+    res.json(token);
   }
 });
 
-app.get("/read-cookie", (req, res) => {
-  if (req.signedCookies.name === "admin") {
-    res.send({ username: "admin" });
-  } else if (req.signedCookies.name === "merkle") {
-    res.send({ username: "merkle" });
-  } else {
-    res.send({ error: "User not found" });
-  }
-});
-
-app.get("/clear-cookie", (req, res) => {
-  res.clearCookie("name").end();
+//endpoint for verifying token
+app.get("/auth/verify", authenticateToken, (req, res) => {
+  res.send("valid");
 });
 
 app.get("*", (req, res) => {

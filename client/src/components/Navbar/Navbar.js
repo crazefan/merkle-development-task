@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const Navbar = ({ username, isAuth, handleLogout }) => {
+const Navbar = ({ isAuth, handleLogout }) => {
   return (
     <nav className="mb-4 shadow">
       <div className="container mx-auto px-6 py-3  flex justify-between items-center">
@@ -20,9 +20,6 @@ const Navbar = ({ username, isAuth, handleLogout }) => {
                   Log out
                 </button>
               )}
-            </li>
-            <li>
-              <p className="px-4">{username}</p>
             </li>
           </ul>
         </div>

@@ -26,6 +26,7 @@ const MovieCard = ({ movie }) => {
               className="underline text-purple"
               href={`https://www.imdb.com/title/${movie.imdbID}`}
               target="_blank"
+              rel="noreferrer"
             >
               IMDb Link
             </a>

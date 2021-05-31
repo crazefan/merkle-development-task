@@ -4,25 +4,26 @@ import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-d
 import LoginPage from "./components/LoginPage/LoginPage";
 import Search from "./components/Search/Search";
 import Navbar from "./components/Navbar/Navbar";
-import { authReadCookie, authDeleteCookie } from "./api/api";
+import { authVerifyToken } from "./api/api";
 
 function App() {
   const [isAuth, setIsAuth] = useState(null);
-  const [username, setUsername] = useState("");
 
-  //check if client has cookie and call in useEffect on mount
-  const readCookie = async () => {
-    const res = await authReadCookie();
-    console.log(res);
-    if (res.username) {
-      setUsername(res.username);
+  //check if client has token and call in useEffect on mount
+  const verifyToken = async () => {
+    const [data, error] = await authVerifyToken();
+    if (data && data === "valid") {
       setIsAuth(true);
+    }
+    if (error) {
+      localStorage.removeItem("token");
+      setIsAuth(false);
     }
   };
 
   //on user logout delete cookie
   const handleLogout = async () => {
-    const res = await authDeleteCookie();
+    localStorage.removeItem("token");
     setIsAuth(false);
   };
 
@@ -31,23 +32,32 @@ function App() {
   };
 
   useEffect(() => {
-    readCookie();
+    verifyToken();
   }, []);
+
+  let routes = (
+    <Switch>
+      <Route
+        exact
+        path="/login/"
+        render={(props) => <LoginPage {...props} handleIsAuth={handleIsAuth} />}
+      />
+      <Redirect to="/login" />
+    </Switch>
+  );
+  if (isAuth) {
+    routes = (
+      <Switch>
+        <Route exact path="/" component={Search} />
+        <Redirect to="/" />
+      </Switch>
+    );
+  }
 
   return (
     <Router>
-      <Navbar username={username} isAuth={isAuth} handleLogout={handleLogout} />
-      <Switch>
-        <Route exact path="/" component={Search} />
-        {!isAuth ? (
-          <Route
-            exact
-            path="/login/"
-            render={(props) => <LoginPage {...props} handleIsAuth={handleIsAuth} />}
-          />
-        ) : null}
-        <Redirect to="/" />
-      </Switch>
+      <Navbar isAuth={isAuth} handleLogout={handleLogout} />
+      {routes}
     </Router>
   );
 }

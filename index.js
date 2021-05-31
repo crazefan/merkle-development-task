@@ -1,10 +1,10 @@
+require("dotenv").config();
 const express = require("express");
 const axios = require("axios");
 const cors = require("cors");
 const path = require("path");
 const redis = require("redis");
 const basicAuth = require("express-basic-auth");
-const cookieParser = require("cookie-parser");
 const jwt = require("jsonwebtoken");
 
 const app = express();
@@ -13,7 +13,7 @@ const app = express();
 const redisClient = redis.createClient(6379);
 
 //server is running on 5000 port (or other specified in .env file)
-const port = process.env.port || 5000;
+const port = process.env.PORT || 5000;
 
 const secret = "c681d5a8e4f2a0cb7d1ac717c370429d";
 
@@ -81,6 +81,7 @@ app.get("/api/", authenticateToken, (req, res) => {
       console.log(err);
       throw err;
     }
+
     if (data) {
       console.log("Request successfully retrieved from Redis cache");
       res.status(200).send(JSON.parse(data));

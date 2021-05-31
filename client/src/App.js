@@ -1,25 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom";
 
-import LoginPage from "./components/LoginPage/LoginPage";
-import Search from "./components/Search/Search";
 import Navbar from "./components/Navbar/Navbar";
-import { authVerifyToken } from "./api/api";
+import Search from "./components/Search/Search";
+import LoginPage from "./components/LoginPage/LoginPage";
+import { hasToken } from "./utils/utils";
 
 function App() {
-  const [isAuth, setIsAuth] = useState(null);
-
-  //check if client has token and call in useEffect on mount
-  const verifyToken = async () => {
-    const [data, error] = await authVerifyToken();
-    if (data && data === "valid") {
-      setIsAuth(true);
-    }
-    if (error) {
-      localStorage.removeItem("token");
-      setIsAuth(false);
-    }
-  };
+  const [isAuth, setIsAuth] = useState(hasToken);
 
   //on user logout delete cookie
   const handleLogout = async () => {
@@ -31,10 +19,6 @@ function App() {
     setIsAuth(true);
   };
 
-  useEffect(() => {
-    verifyToken();
-  }, []);
-
   let routes = (
     <Switch>
       <Route
@@ -45,6 +29,7 @@ function App() {
       <Redirect to="/login" />
     </Switch>
   );
+
   if (isAuth) {
     routes = (
       <Switch>

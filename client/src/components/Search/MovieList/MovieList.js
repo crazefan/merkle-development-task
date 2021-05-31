@@ -4,7 +4,9 @@ import MovieCard from "./MovieCard/MovieCard";
 const MovieList = ({ movies, notFound }) => {
   const renderCards = () => {
     if (movies.length) {
-      return movies.map((movie, idx) => <MovieCard movie={movie} />);
+      return movies.map((movie, idx) => (
+        <MovieCard movie={movie} key={`movie-card-${movie.imdbID}`} />
+      ));
     }
     return null;
   };

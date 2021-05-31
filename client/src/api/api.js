@@ -1,28 +1,12 @@
 import axios from "axios";
 
 //authentication request
-
 export const authRequest = async (username, password) => {
   return await axios
     .get("http://localhost:5000/auth/login", {
       auth: { username: username, password: password },
     })
     .then(({ data }) => {
-      return [data, null];
-    })
-    .catch((error) => {
-      return [null, error];
-    });
-};
-
-export const authVerifyToken = async () => {
-  const authToken = localStorage.getItem("token");
-  return await axios
-    .get("http://localhost:5000/auth/verify", {
-      headers: { Authorization: `Bearer ${authToken}` },
-    })
-    .then(({ data }) => {
-      console.log(data);
       return [data, null];
     })
     .catch((error) => {
@@ -39,7 +23,9 @@ const makeRequestCreator = () => {
     if (token) token.cancel("Request is cancelled");
 
     token = axios.CancelToken.source();
+
     const authToken = localStorage.getItem("token");
+
     const result = await axios
       .get("http://localhost:5000/api/", {
         headers: { Authorization: `Bearer ${authToken}` },
@@ -51,10 +37,9 @@ const makeRequestCreator = () => {
       })
       .catch((error) => {
         if (axios.isCancel(error)) {
-          console.log("Request canceled", error);
           return [{ Response: "Cancelled" }, null];
         }
-        console.log(error);
+
         return [null, error];
       });
     return result;

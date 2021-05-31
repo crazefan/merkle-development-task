@@ -15,12 +15,15 @@ const LoginPage = ({ handleIsAuth }) => {
 
   const handleLogin = async () => {
     setAuthmessage(false);
+
     const [data, error] = await authRequest(username, password);
+
     if (error) {
       console.log(error);
       setAuthmessage(true);
       return;
     }
+
     if (data) {
       handleIsAuth();
       localStorage.setItem("token", data);

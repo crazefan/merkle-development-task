@@ -21,13 +21,14 @@ const Search = () => {
 
   const search = async (searchvalue) => {
     setLoading(true);
-    const [data, error] = await fetchMovies({
+
+    const [data] = await fetchMovies({
       movie: searchvalue.trim(),
       page: currentPage,
       type,
       year,
     });
-    console.log(data);
+
     //check if search query is not empty and fetch movies from API, after that set results array to movies
     if (data && data.Response === "True") {
       setMovies([...data.Search]);
@@ -36,13 +37,18 @@ const Search = () => {
       setTotalPages(countTotalPages(data.totalResults));
       return;
     }
+
     if (data && data.Response === "False") {
       setNotFound(true);
       setLoading(false);
+      setMovies([]);
+
       return;
     }
+
     setNotFound(true);
     setLoading(false);
+    setMovies([]);
   };
 
   const handlePageChange = (change) => {
@@ -83,11 +89,14 @@ const Search = () => {
         onTypeChange={handleTypeChange}
         onYearChange={handleYearChange}
       />
-      <PageControl
-        currentPage={currentPage}
-        totalPages={totalPages}
-        handlePageChange={handlePageChange}
-      />
+      {Array.isArray(movies) && movies.length > 0 && (
+        <PageControl
+          currentPage={currentPage}
+          totalPages={totalPages}
+          handlePageChange={handlePageChange}
+        />
+      )}
+
       {loading ? <Spinner /> : <MovieList movies={movies} notFound={notFound} />}
     </div>
   );

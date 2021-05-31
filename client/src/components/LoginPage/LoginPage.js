@@ -1,8 +1,7 @@
-import { set } from "lodash";
 import React, { useState } from "react";
 import { authRequest } from "../../api/api";
 
-const Auth = () => {
+const LoginPage = ({ handleIsAuth }) => {
   const [username, setUsername] = useState();
   const [password, setPassword] = useState();
   const [authmessage, setAuthmessage] = useState(false);
@@ -22,18 +21,15 @@ const Auth = () => {
       setAuthmessage(true);
       return;
     }
+    handleIsAuth();
     console.log(data);
-  };
-
-  const authError = () => {
-    <p>Authentication failed, wrong credentials</p>;
   };
 
   return (
     <div className="flex justify-center pt-10">
       <div className="max-w-md bg-white rounded px-8 py-6 mx-10 flex flex-col">
         <div className="mb-4">
-          <label className="block text-purple-500 text-sm font-bold mb-2" for="username">
+          <label className="block text-purple-500 text-sm font-bold mb-2" htmlFor="username">
             Username
           </label>
           <input
@@ -45,7 +41,7 @@ const Auth = () => {
           />
         </div>
         <div className="mb-6">
-          <label className="block text-purple-500 text-sm font-bold mb-2" for="password">
+          <label className="block text-purple-500 text-sm font-bold mb-2" htmlFor="password">
             Password
           </label>
           <input
@@ -60,13 +56,19 @@ const Auth = () => {
         <button
           className="bg-purple-500 hover:bg-purple-800 text-white font-bold py-2 px-4 rounded"
           type="button"
-          onSubmit={handleLogin}
+          onClick={handleLogin}
         >
           Sign In
         </button>
+
+        <div>
+          <p className="text-xs text-red-500 py-2" hidden={!authmessage}>
+            Authentication failed, wrong credentials
+          </p>
+        </div>
       </div>
     </div>
   );
 };
 
-export default Auth;
+export default LoginPage;

@@ -1,12 +1,35 @@
 import axios from "axios";
 
 //authentication request
+
+export const authReadCookie = async () => {
+  return await axios
+    .get("http://localhost:5000/read-cookie")
+    .then(({ data }) => {
+      return [data, null];
+    })
+    .catch((error) => {
+      return [null, error];
+    });
+};
+
+export const authDeleteCookie = async () => {
+  return await axios
+    .get("http://localhost:5000/clear-cookie")
+    .then(({ data }) => {
+      return [data, null];
+    })
+    .catch((error) => {
+      return [null, error];
+    });
+};
+
 export const authRequest = async (username, password) => {
   return await axios
     .get("http://localhost:5000/auth/login", {
       auth: { username, password },
     })
-    .then((data) => {
+    .then(({ data }) => {
       return [data, null];
     })
     .catch((error) => {

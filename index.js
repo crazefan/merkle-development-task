@@ -1,19 +1,24 @@
 const express = require("express");
-const app = express();
 const axios = require("axios");
 const cors = require("cors");
 const path = require("path");
 const redis = require("redis");
 const basicAuth = require("express-basic-auth");
-const { response } = require("express");
+const cookieParser = require("cookie-parser");
+
+const app = express();
 
 //redis server is running on port 6379
 const redisClient = redis.createClient(6379);
 
+//server is running on 5000 port (or other specified in .env file)
+const port = process.env.port || 5000;
+
+//setting up users with access to API endpoint
 const auth = basicAuth({
   users: {
     admin: "12345",
-    tima: "12345",
+    merkle: "12345",
   },
   unauthorizedResponse: getUnauthorizedResponse,
 });
@@ -24,8 +29,7 @@ function getUnauthorizedResponse(req) {
     : "No credentials provided";
 }
 
-const port = process.env.port || 5000;
-
+// creating axios instance to fetch from remote API
 const omdbApi = axios.create({
   baseURL: "https://www.omdbapi.com/",
 });
@@ -42,6 +46,9 @@ app.use(cors());
 
 app.use(express.static(path.join(__dirname, "client/build")));
 
+app.use(cookieParser("642a04b66be1a2726b296aae3b52973f"));
+
+//server's api fetching endpoint
 app.get("/api/", (req, res) => {
   const { movie, page, type, year } = req.query;
 
@@ -74,11 +81,30 @@ app.get("/api/", (req, res) => {
 });
 
 app.get("/auth/login", auth, (req, res) => {
+  const options = {
+    httpOnly: true,
+    signed: true,
+  };
+
   if (req.auth.user === "admin") {
-    res.send("admin");
-  } else if (req.auth.user === "tima") {
-    res.send("tima");
+    res.cookie("name", "admin", options).send("admin");
+  } else if (req.auth.user === "merkle") {
+    res.cookie("name", "merkle", options).send("merkle");
   }
+});
+
+app.get("/read-cookie", (req, res) => {
+  if (req.signedCookies.name === "admin") {
+    res.send({ username: "admin" });
+  } else if (req.signedCookies.name === "merkle") {
+    res.send({ username: "merkle" });
+  } else {
+    res.send({ error: "User not found" });
+  }
+});
+
+app.get("/clear-cookie", (req, res) => {
+  res.clearCookie("name").end();
 });
 
 app.get("*", (req, res) => {

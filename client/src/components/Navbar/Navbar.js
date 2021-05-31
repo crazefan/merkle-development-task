@@ -1,30 +1,28 @@
-import React, { useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 
-const Navbar = () => {
-  const [auth, setAuth] = useState(true);
-
+const Navbar = ({ username, isAuth, handleLogout }) => {
   return (
     <nav className="mb-4 shadow">
       <div className="container mx-auto px-6 py-3  flex justify-between items-center">
-        <Link
-          to="/"
-          className="font-bold text-purple-500 hover:text-purple-800 text-xl"
-          href="#main"
-        >
+        <Link to="/" className="font-bold text-purple-500 hover:text-purple-800 text-xl">
           merkle-development-task
         </Link>
         <div className=" lg:block">
           <ul className="inline-flex">
             <li>
-              <Link to="/login" className="px-4 hover:text-purple-800" href="/">
-                Log in
-              </Link>
+              {!isAuth ? (
+                <Link to="/login" className="px-4 hover:text-purple-800">
+                  Log in
+                </Link>
+              ) : (
+                <button className="px-4 hover:text-purple-800" onClick={handleLogout}>
+                  Log out
+                </button>
+              )}
             </li>
             <li>
-              <a className="px-4 hover:text-purple-800" href="#">
-                Sign up
-              </a>
+              <p className="px-4">{username}</p>
             </li>
           </ul>
         </div>

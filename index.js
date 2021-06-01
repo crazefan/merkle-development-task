@@ -10,7 +10,7 @@ const jwt = require("jsonwebtoken");
 const app = express();
 
 //redis server is running on port 6379
-const redisClient = redis.createClient(6379);
+const redisClient = redis.createClient(process.env.REDIS_URL || 6379);
 
 //server is running on 5000 port (or other specified in .env file)
 const port = process.env.PORT || 5000;
@@ -71,7 +71,7 @@ app.use(cors());
 
 app.use(express.static(path.join(__dirname, "client/build")));
 
-//server's api fetching endpoint secured by client token authentication
+//server's remote api fetching endpoint, access for client restricted with token authentication
 app.get("/api/", authenticateToken, (req, res) => {
   const { movie, page, type, year } = req.query;
 
@@ -111,11 +111,6 @@ app.get("/auth/login", auth, (req, res) => {
     const token = generateAccessToken({ username: req.auth.user });
     res.json(token);
   }
-});
-
-//endpoint for verifying token
-app.get("/auth/verify", authenticateToken, (req, res) => {
-  res.send("valid");
 });
 
 app.get("*", (req, res) => {

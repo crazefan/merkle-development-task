@@ -1,12 +1,13 @@
 {
   "name": "merkle-task",
   "version": "1.0.0",
-  "description": "",
+  "description": "Backend + frontend application for searching movies from omdb remote API",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js"
   },
+  "heroku-postbuild": "cd client && npm install && npm run build",
   "keywords": [],
   "author": "crazefan",
   "license": "ISC",

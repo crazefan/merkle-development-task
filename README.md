@@ -5,6 +5,8 @@ basic authorization and JWT token is sent to client. Results are cached with Red
 
 TailwindCSS for frontend styling. Axios for all fetching operations, remote and local calls.
 
+Deployed on Heroku: [https://merkle-task.herokuapp.com/](https://merkle-task.herokuapp.com/)
+
 ## Development mode 👨‍💻
 
 Testing the website is only possible with following credentials for API:

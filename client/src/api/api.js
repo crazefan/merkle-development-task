@@ -3,7 +3,7 @@ import axios from "axios";
 //authentication request
 export const authRequest = async (username, password) => {
   return await axios
-    .get("http://localhost:5000/auth/login", {
+    .get("/auth/login", {
       auth: { username: username, password: password },
     })
     .then(({ data }) => {
@@ -27,7 +27,7 @@ const makeRequestCreator = () => {
     const authToken = localStorage.getItem("token");
 
     const result = await axios
-      .get("http://localhost:5000/api/", {
+      .get("/api/", {
         headers: { Authorization: `Bearer ${authToken}` },
         params: { movie, page, year, type },
         cancelToken: token.token,

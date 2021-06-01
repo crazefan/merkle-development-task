@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+
 import { authRequest } from "../../api/api";
 
 const LoginPage = ({ handleIsAuth }) => {
@@ -19,7 +20,6 @@ const LoginPage = ({ handleIsAuth }) => {
     const [data, error] = await authRequest(username, password);
 
     if (error) {
-      console.log(error);
       setAuthmessage(true);
       return;
     }

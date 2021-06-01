@@ -10,6 +10,7 @@ const SearchControl = ({ onInputChange, onTypeChange, onYearChange }) => {
       </option>
     ));
   };
+
   return (
     <div className="flex justify-center items-center my-8">
       <div className="mx-4">

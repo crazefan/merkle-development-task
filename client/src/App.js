@@ -4,12 +4,13 @@ import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-d
 import Navbar from "./components/Navbar/Navbar";
 import Search from "./components/Search/Search";
 import LoginPage from "./components/LoginPage/LoginPage";
+
 import { hasToken } from "./utils/utils";
 
 function App() {
   const [isAuth, setIsAuth] = useState(hasToken);
 
-  //on user logout delete cookie
+  //on user logout delete token
   const handleLogout = async () => {
     localStorage.removeItem("token");
     setIsAuth(false);
@@ -19,6 +20,7 @@ function App() {
     setIsAuth(true);
   };
 
+  //conditional routes rendering depending on whether user is logged in or not
   let routes = (
     <Switch>
       <Route

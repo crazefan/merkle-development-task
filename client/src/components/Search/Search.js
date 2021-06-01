@@ -70,7 +70,7 @@ const Search = () => {
     setCurrentPage(1);
   };
 
-  // adds 500ms delay for search to avoid unnecessary calls to API using lodash debounce
+  // adds 300ms delay for search to avoid unnecessary calls to API with the help of lodash debounce
   const searchDebounce = debounce(() => {
     search(movieQuery);
   }, 300);

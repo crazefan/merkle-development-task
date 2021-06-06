@@ -4,7 +4,7 @@ services:
   app:
     build: ./
     environment:
-      - REDIS_URL="redis://cache"
+      - REDIS_URL=redis://cache
     ports:
       - "5000:5000"
     container_name: merkle-app

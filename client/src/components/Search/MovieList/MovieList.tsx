@@ -1,7 +1,9 @@
 import React from "react";
 import MovieCard from "./MovieCard/MovieCard";
 
-const MovieList = ({ movies, notFound }) => {
+import { MovieListProps } from "../../../types";
+
+const MovieList = ({ movies, notFound }: MovieListProps) => {
   const renderCards = () => {
     if (movies.length) {
       return movies.map((movie, idx) => (

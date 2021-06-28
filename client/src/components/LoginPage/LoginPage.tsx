@@ -2,15 +2,17 @@ import React, { useState } from "react";
 
 import { authRequest } from "../../api/api";
 
-const LoginPage = ({ handleIsAuth }) => {
-  const [username, setUsername] = useState();
-  const [password, setPassword] = useState();
+import { LoginPageProps } from "../../types";
+
+const LoginPage = ({ handleIsAuth }: LoginPageProps) => {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const [authmessage, setAuthmessage] = useState(false);
 
-  const handlePasswordChange = (e) => {
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
   };
-  const handleUsernameChange = (e) => {
+  const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUsername(e.target.value);
   };
 

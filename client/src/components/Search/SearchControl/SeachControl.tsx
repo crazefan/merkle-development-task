@@ -1,6 +1,8 @@
 import React from "react";
 
-const SearchControl = ({ onInputChange, onTypeChange, onYearChange }) => {
+import { SearchControlProps } from "../../../types";
+
+const SearchControl = ({ onInputChange, onTypeChange, onYearChange }: SearchControlProps) => {
   // generate options for years from 1874 to 2021
   const yearOptionsList = () => {
     const years = Array.from(Array(149), (x, i) => 2021 - i);

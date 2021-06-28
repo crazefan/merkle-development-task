@@ -1,7 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const Navbar = ({ isAuth, handleLogout }) => {
+import { NavbarProps } from "../../types";
+
+const Navbar = ({ isAuth, handleLogout }: NavbarProps) => {
   return (
     <nav className="mb-4 shadow">
       <div className="container mx-auto px-6 py-3  flex justify-between items-center">

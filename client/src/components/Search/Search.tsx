@@ -9,17 +9,19 @@ import MovieList from "./MovieList/MovieList";
 import PageControl from "./PageControl/PageControl";
 import SearchControl from "./SearchControl/SeachControl";
 
+import { ChangeEventType, Movie } from "../../types";
+
 const Search = () => {
   const [loading, setLoading] = useState(false);
   const [movieQuery, setMovieQuery] = useState("");
   const [type, setType] = useState("");
   const [year, setYear] = useState("");
-  const [movies, setMovies] = useState([]);
+  const [movies, setMovies] = useState<any[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState();
+  const [totalPages, setTotalPages] = useState<number | undefined>();
   const [notFound, setNotFound] = useState(false);
 
-  const search = async (searchvalue) => {
+  const search = async (searchvalue: string) => {
     setLoading(true);
 
     const [data] = await fetchMovies({
@@ -51,21 +53,21 @@ const Search = () => {
     setMovies([]);
   };
 
-  const handlePageChange = (change) => {
+  const handlePageChange = (change: number) => {
     setCurrentPage(currentPage + change);
   };
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: ChangeEventType) => {
     setMovieQuery(e.target.value);
     setCurrentPage(1);
   };
 
-  const handleYearChange = (e) => {
+  const handleYearChange = (e: ChangeEventType) => {
     setYear(e.target.value);
     setCurrentPage(1);
   };
 
-  const handleTypeChange = (e) => {
+  const handleTypeChange = (e: ChangeEventType) => {
     setType(e.target.value);
     setCurrentPage(1);
   };

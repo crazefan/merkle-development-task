@@ -1,6 +1,7 @@
 import React from "react";
+import { MovieCardProps } from "../../../../types";
 
-const MovieCard = ({ movie }) => {
+const MovieCard = ({ movie }: MovieCardProps) => {
   return (
     <div className="flex-5 items-center border-4 mx-auto my-4 rounded-xl">
       <div className="flex items-center">
@@ -9,9 +10,10 @@ const MovieCard = ({ movie }) => {
             className="w-20  object-scale-down"
             src={movie.Poster}
             alt="Movie poster"
-            onError={(e) => {
-              e.target.onerror = null;
-              e.target.src = "https://i.imgur.com/ylFANk8.jpg";
+            onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+              const element = e.target as HTMLImageElement;
+              element.onerror = null;
+              element.src = "https://i.imgur.com/ylFANk8.jpg";
             }}
           />
         </div>

@@ -1,5 +1,5 @@
 //calculate total number of pages for the result (10 results on the page)
-export const countTotalPages = (totalResults) => {
+export const countTotalPages = (totalResults: number) => {
   return Math.ceil(Number(totalResults) / 10);
 };
 

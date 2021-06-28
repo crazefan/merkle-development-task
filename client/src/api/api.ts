@@ -1,9 +1,10 @@
-import axios from "axios";
+import axios, { CancelTokenSource } from "axios";
+import { MakeRequestType } from "../types";
 
 //authentication request
-export const authRequest = async (username, password) => {
+export const authRequest = async (username: string, password: string) => {
   return await axios
-    .get("/auth/login", {
+    .get("http://localhost:5000/auth/login", {
       auth: { username: username, password: password },
     })
     .then(({ data }) => {
@@ -17,9 +18,9 @@ export const authRequest = async (username, password) => {
 // request creator is needed to cancel unnecessary calls on client side using axios cancel token
 const makeRequestCreator = () => {
   //token is declared outside a called function so that previous token is untouched
-  let token;
+  let token: CancelTokenSource;
 
-  return async ({ movie, page, year, type }) => {
+  return async ({ movie, page, year, type }: MakeRequestType) => {
     if (token) token.cancel("Request is cancelled");
 
     token = axios.CancelToken.source();
@@ -27,7 +28,7 @@ const makeRequestCreator = () => {
     const authToken = localStorage.getItem("token");
 
     const result = await axios
-      .get("/api/", {
+      .get("http://localhost:5000/api/", {
         headers: { Authorization: `Bearer ${authToken}` },
         params: { movie, page, year, type },
         cancelToken: token.token,
